@@ -1,0 +1,185 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f9f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 60%;
+    margin: 40px auto;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2e7d32;
+}
+
+.subtitle {
+    text-align: center;
+    color: #666;
+    margin-block-end: 25px;
+}
+
+.form-group {
+    margin-block-end: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-block-end: 8px;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* ✅ Case à cocher verte et alignée */
+.checkbox-group label {
+  display: flex;              /* aligne case + texte sur la même ligne */
+  align-items: center;        /* centre verticalement */
+  font-weight: normal;        /* texte normal */
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  accent-color: #2e7d32;      /* vert éco */
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;          /* espace entre case et texte */
+}
+
+button {
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #256728;
+}
+
+#message {
+    margin-block-start: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Style général du tableau */
+table {
+    border-collapse: collapse;
+    width: 70%;
+    margin: 30px auto;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 12px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* En-tête du tableau */
+th {
+    background-color: #2e7d32;   /* ✅ Vert éco */
+    color: white;                /* ✅ Texte blanc */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Alternance des lignes */
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Titre secondaire */
+h2 {
+    text-align: center;
+    color: #333;
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+/* Feedback messages */
+.feedback {
+    text-align: center;
+    margin-top: 15px;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 6px;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feedback.success {
+    background-color: #d4edda;   /* vert clair */
+    color: #155724;              /* vert foncé */
+    border: 1px solid #c3e6cb;
+}
+
+.feedback.error {
+    background-color: #f8d7da;   /* rouge clair */
+    color: #721c24;              /* rouge foncé */
+    border: 1px solid #f5c6cb;
+}
+
+/* Sélecteur de statut */
+.status-select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.status-en_attente {
+    color: #d97706;
+    font-weight: bold;
+}
+
+.status-en_cours {
+    color: #2563eb;
+    font-weight: bold;
+}
+
+.status-traite {
+    color: #15803d;
+    font-weight: bold;
+}
+
+/* Suggestion box */
+.suggestion-box {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background-color: #e8f5e9;
+    border-left: 5px solid #2e7d32;
+    color: #1b5e20;
+    font-weight: bold;
+}

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Liste des signalements</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Liste des signalements</h1>
+  <p>Consultez les signalements écologiques enregistrés :</p>
+
+  <table border="1" cellspacing="0" cellpadding="5">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Type</th>
+        <th>Lieu</th>
+        <th>Auteur</th>
+        <th>Statut</th>
+        <th>Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody">
+      <!-- Les lignes seront injectées ici par liste.js -->
+    </tbody>
+  </table>
+
+  <!-- Charger le script à la fin du body -->
+  <script src="liste.js"></script>
+</body>
+</html>

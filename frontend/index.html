@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Soumettre un signalement écologique</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Soumettre un signalement écologique</h1>
+    <p class="subtitle">Signalez un problème écologique sur le campus</p>
+
+    <!-- Formulaire de signalement -->
+    <form action="/submit" method="POST">
+      <div class="form-group">
+        <label for="type">Type de signalement :</label>
+        <select id="type" name="type" required>
+          <option value="Déchet">Déchet</option>
+          <option value="Fuite d'eau">Fuite d'eau</option>
+          <option value="Pollution">Pollution</option>
+          <option value="Éclairage inutile">Éclairage inutile</option>
+          <option value="Gaspillage énergie">Gaspillage énergie</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="lieu">Lieu :</label>
+        <input type="text" id="lieu" name="lieu" placeholder="Ex: Salle C1" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description :</label>
+        <textarea id="description" name="description" rows="4" placeholder="Décrivez le problème..." required></textarea>
+      </div>
+
+      <!-- ✅ Case anonymat en vert et alignée -->
+      <div class="form-group checkbox-group">
+        <label>
+          <input type="checkbox" name="anonymous">
+          Envoyer anonymement
+        </label>
+      </div>
+
+      <button type="submit">Soumettre</button>
+    </form>
+
+    <!-- Liens utiles -->
+    <div style="margin-top:20px; text-align:center;">
+      <a href="liste.html">Voir la liste des signalements</a><br><br>
+      <button onclick="window.location.href='/export'">Exporter en CSV</button>
+    </div>
+
+    <!-- Zone de message -->
+    <div id="message"></div>
+  </div>
+</body>
+</html>
