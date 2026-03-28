@@ -10,8 +10,8 @@ async function chargerStatistiques() {
             return;
         }
 
-        const stats = result.data;
-        const total = stats.nouveau + stats.en_cours + stats.traite;
+        const stats = result.data; // objet {en_attente, en_cours, traite}
+        const total = (stats.en_attente || 0) + (stats.en_cours || 0) + (stats.traite || 0);
 
         let rows = '';
         for (const [statut, nombre] of Object.entries(stats)) {

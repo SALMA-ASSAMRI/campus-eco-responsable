@@ -1,86 +1,97 @@
 console.log("✅ liste.js est bien chargé !");
 
-async function chargerSignalements() {
-    const tableBody = document.getElementById('tableBody');
+// Charger les signalements depuis le backend
+fetch('/signalements')
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      const tbody = document.querySelector('#signalementsTable tbody');
+      tbody.innerHTML = '';
 
-    try {
-        const response = await fetch('/signalements');
-        const result = await response.json();
-        console.log("Données reçues :", result.data);
+      data.data.forEach(sig => {
+        const tr = document.createElement('tr');
 
-        if (!result.success || result.data.length === 0) {
-            tableBody.innerHTML = `
-                <tr>
-                    <td colspan="7">Aucun signalement à afficher pour le moment.</td>
-                </tr>
-            `;
-            return;
-        }
+        // Format date lisible
+        const date = new Date(sig.date_creation).toLocaleString('fr-FR');
 
-        tableBody.innerHTML = '';
-
-        result.data.forEach(signalement => {
-            const auteur = signalement.anonyme == 1 
-                ? "Anonyme" 
-                : (signalement.nom || "—");
-
-            const row = `
-                <tr>
-                    <td>${signalement.id}</td>
-                    <td>${signalement.type}</td>
-                    <td>${signalement.lieu}</td>
-                    <td>${auteur}</td>
-                    <!-- ✅ Statut affiché toujours "nouveau" -->
-                    <td class="status-nouveau">nouveau</td>
-                    <td>${new Date(signalement.date_creation).toLocaleString()}</td>
-                    <td>
-                        <select class="status-select" onchange="changerStatut(${signalement.id}, this.value)">
-                            <option value="nouveau" ${signalement.statut === 'nouveau' ? 'selected' : ''}>En attente</option>
-                            <option value="en_cours" ${signalement.statut === 'en_cours' ? 'selected' : ''}>En cours</option>
-                            <option value="traite" ${signalement.statut === 'traite' ? 'selected' : ''}>Traité</option>
-                        </select>
-                    </td>
-                </tr>
-            `;
-            tableBody.innerHTML += row;
-        });
-
-    } catch (error) {
-        console.error("❌ Erreur lors du chargement :", error);
-        tableBody.innerHTML = `
-            <tr>
-                <td colspan="7">❌ Erreur lors du chargement des signalements.</td>
-            </tr>
+        tr.innerHTML = `
+          <td>${sig.id}</td>
+          <td>${sig.type}</td>
+          <td class="lieu-cell">${sig.lieu}</td>
+          <td>${sig.nom || 'Anonyme'}</td>
+          <td class="description-cell">${sig.description}</td>
+          <td class="date-cell">${date}</td>
+          <td class="statut">${sig.statut}</td>
+          <td>
+            <select class="action-select" data-id="${sig.id}">
+              <option value="en_attente" ${sig.statut === 'en_attente' ? 'selected' : ''}>En attente</option>
+              <option value="en_cours" ${sig.statut === 'en_cours' ? 'selected' : ''}>En cours</option>
+              <option value="traite" ${sig.statut === 'traite' ? 'selected' : ''}>Traité</option>
+            </select>
+          </td>
         `;
-    }
-}
 
-// ✅ Afficher toujours "nouveau" dans la colonne Statut
-function afficherStatut(statut) {
-    return "nouveau";
-}
+        tbody.appendChild(tr);
+      });
 
-async function changerStatut(id, nouveauStatut) {
-    try {
-        const response = await fetch(`/signalement/${id}`, {
+      appliquerCouleurs();
+
+      // Gérer changement Action
+      document.querySelectorAll('.action-select').forEach(select => {
+        select.addEventListener('change', async (e) => {
+          const id = e.target.dataset.id;
+          const statut = e.target.value;
+
+          // Mise à jour backend
+          const res = await fetch(`/signalement/${id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ statut: nouveauStatut })
+            body: JSON.stringify({ statut })
+          });
+          const result = await res.json();
+
+          if (result.success) {
+            const row = e.target.closest('tr');
+            const statutCell = row.querySelector('.statut');
+            statutCell.textContent = statut;
+            appliquerCouleurs();
+          } else {
+            alert("❌ Erreur lors de la mise à jour du statut");
+          }
         });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            alert(result.message || 'Erreur lors de la mise à jour du statut.');
-            return;
-        }
-
-        // Recharge la liste après mise à jour
-        chargerSignalements();
-    } catch (error) {
-        alert('Erreur de connexion au serveur.');
+      });
+    } else {
+      const tbody = document.querySelector('#signalementsTable tbody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="8">❌ Erreur lors du chargement des signalements.</td>
+        </tr>
+      `;
     }
+  })
+  .catch(err => {
+    console.error("❌ Erreur de connexion :", err);
+    const tbody = document.querySelector('#signalementsTable tbody');
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="8">❌ Erreur de connexion au serveur.</td>
+      </tr>
+    `;
+  });
+
+// ✅ Fonction pour appliquer couleurs directement dans liste.js
+function appliquerCouleurs() {
+  document.querySelectorAll('.statut').forEach(cell => {
+    cell.classList.remove('statut-traite', 'statut-encours', 'statut-attente');
+    if (cell.textContent === 'traite') {
+      cell.classList.add('statut-traite');
+    } else if (cell.textContent === 'en_cours') {
+      cell.classList.add('statut-encours');
+    } else if (cell.textContent === 'en_attente') {
+      cell.classList.add('statut-attente');
+    }
+  });
 }
 
-// 👉 Charger les signalements au démarrage
-chargerSignalements();
+
+   

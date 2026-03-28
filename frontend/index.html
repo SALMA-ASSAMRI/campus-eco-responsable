@@ -7,11 +7,11 @@
 </head>
 <body>
   <div class="container">
-    <h1>Soumettre un signalement écologique</h1>
+    <h1>🌱 Soumettre un signalement écologique</h1>
     <p class="subtitle">Signalez un problème écologique sur le campus</p>
 
     <!-- Formulaire de signalement -->
-    <form action="/submit" method="POST">
+    <form id="signalementForm">
       <div class="form-group">
         <label for="type">Type de signalement :</label>
         <select id="type" name="type" required>
@@ -28,30 +28,41 @@
         <input type="text" id="lieu" name="lieu" placeholder="Ex: Salle C1" required>
       </div>
 
+      <!-- ✅ Champ Nom -->
+      <div class="form-group">
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom" placeholder="Votre nom ou prénom">
+      </div>
+
       <div class="form-group">
         <label for="description">Description :</label>
         <textarea id="description" name="description" rows="4" placeholder="Décrivez le problème..." required></textarea>
       </div>
 
-      <!-- ✅ Case anonymat en vert et alignée -->
+      <!-- ✅ Case anonymat -->
       <div class="form-group checkbox-group">
-        <label>
-          <input type="checkbox" name="anonymous">
-          Envoyer anonymement
-        </label>
+        <span class="checkbox-label">Envoyer anonymement</span>
+        <input type="checkbox" id="anonyme" name="anonyme">
       </div>
 
-      <button type="submit">Soumettre</button>
+      <!-- ✅ Zone des messages -->
+      <div id="confirmationMessage"></div>
+      <div id="suggestionBox" class="suggestion-box"></div>
+
+      <!-- ✅ Bouton Soumettre pleine largeur -->
+      <button type="submit" class="full-width">Soumettre</button>
     </form>
 
-    <!-- Liens utiles -->
-    <div style="margin-top:20px; text-align:center;">
-      <a href="liste.html">Voir la liste des signalements</a><br><br>
-      <button onclick="window.location.href='/export'">Exporter en CSV</button>
+    <!-- ✅ Liens et autres actions -->
+    <div class="form-actions">
+      <button onclick="window.location.href='/export'" class="full-width">📤 Exporter en CSV</button>
+      <a href="liste.html">📋 Voir la liste des signalements</a>
+      <a href="stats.html">📊 Voir les statistiques</a>
     </div>
-
-    <!-- Zone de message -->
-    <div id="message"></div>
   </div>
+
+  <!-- ✅ Script JS -->
+  <script src="form.js"></script>
 </body>
 </html>
+

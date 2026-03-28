@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
-// Servir les fichiers statiques du frontend
+// ✅ Servir les fichiers statiques du dossier frontend
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // ============ ROUTES ============
@@ -27,7 +27,7 @@ app.use(signalementsRoutes);
 const exportRoute = require('./routes/export');
 app.use('/', exportRoute);
 
-// Route racine
+// ✅ Route racine → index.html
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
@@ -59,7 +59,7 @@ app.get('/api/test-db', async (req, res) => {
     }
 });
 
-// Nouvelle route pour les statistiques
+// ✅ Route pour les statistiques
 app.get('/statistiques', async (req, res) => {
     try {
         const [rows] = await pool.query(`
@@ -71,18 +71,17 @@ app.get('/statistiques', async (req, res) => {
         res.json({ success: true, data: rows });
     } catch (error) {
         console.error(error);
-        res.json({ success: false, message: "Erreur lors du calcul des statistiques" });
+        res.status(500).json({ success: false, message: "Erreur lors du calcul des statistiques" });
     }
 });
 
-// Modifier le statut d’un signalement
+// ✅ Modifier le statut d’un signalement
 app.put('/signalement/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const { statut } = req.body;
 
-        // ✅ valeurs valides selon ta table ENUM
-        const statutsValides = ['nouveau', 'en_cours', 'traite'];
+        const statutsValides = ['en_attente', 'en_cours', 'traite'];
 
         if (!statut || !statutsValides.includes(statut)) {
             return res.status(400).json({
@@ -141,7 +140,9 @@ app.listen(PORT, () => {
 ║  📩 POST: http://localhost:${PORT}/signalement
 ║  📋 GET:  http://localhost:${PORT}/signalements
 ║  🔄 PUT:  http://localhost:${PORT}/signalement/:id
+║  📊 Stats: http://localhost:${PORT}/statistiques
 ║  📤 EXPORT: http://localhost:${PORT}/export
 ╚══════════════════════════════════════════════════╝
     `);
 });
+

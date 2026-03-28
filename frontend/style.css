@@ -6,7 +6,8 @@ body {
 }
 
 .container {
-    width: 60%;
+    width: 90%;              /* ✅ plus large pour contenir le tableau */
+    max-width: 1200px;       /* ✅ limite sur grands écrans */
     margin: 40px auto;
     background-color: white;
     padding: 30px;
@@ -17,22 +18,26 @@ body {
 h1 {
     text-align: center;
     color: #2e7d32;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 .subtitle {
     text-align: center;
     color: #666;
-    margin-block-end: 25px;
+    margin-bottom: 25px;
 }
 
 .form-group {
-    margin-block-end: 20px;
+    margin-bottom: 20px;
 }
 
 label {
     display: block;
     font-weight: bold;
-    margin-block-end: 8px;
+    margin-bottom: 8px;
 }
 
 input,
@@ -44,49 +49,84 @@ textarea {
     border-radius: 8px;
     font-size: 14px;
     box-sizing: border-box;
+    background-color: #fff;
 }
 
-/* ✅ Case à cocher verte et alignée */
-.checkbox-group label {
-  display: flex;              /* aligne case + texte sur la même ligne */
-  align-items: center;        /* centre verticalement */
-  font-weight: normal;        /* texte normal */
+/* Case à cocher inversée */
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-label {
+  font-weight: normal;
   cursor: pointer;
 }
 
 .checkbox-group input[type="checkbox"] {
-  accent-color: #2e7d32;      /* vert éco */
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;          /* espace entre case et texte */
+  accent-color: #2e7d32;
+  width: 20px;
+  height: 20px;
 }
 
+/* Boutons pleine largeur */
 button {
     background-color: #2e7d32;
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 18px;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     width: 100%;
+    margin: 12px 0;
+    display: block;
 }
 
 button:hover {
     background-color: #256728;
 }
 
+/* Liens sous les boutons et sous le tableau */
+.form-actions {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.form-actions a {
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 16px;
+    color: #2e7d32;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.form-actions a:hover {
+    text-decoration: underline;
+}
+
+/* Message de confirmation/erreur */
 #message {
-    margin-block-start: 20px;
+    margin: 10px 0;
     text-align: center;
     font-weight: bold;
 }
 
-/* Style général du tableau */
+#message.success {
+    color: green;
+}
+
+#message.error {
+    color: red;
+}
+
+/* Tableau */
 table {
     border-collapse: collapse;
-    width: 70%;
-    margin: 30px auto;
+    width: 100%;             /* ✅ occupe toute la largeur du container */
+    margin: 20px auto;
     font-family: Arial, sans-serif;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     background-color: white;
@@ -97,31 +137,24 @@ th, td {
     padding: 12px;
     text-align: center;
     font-size: 15px;
+    vertical-align: middle;
+    white-space: pre-line;
+    word-wrap: break-word;
 }
 
-/* En-tête du tableau */
 th {
-    background-color: #2e7d32;   /* ✅ Vert éco */
-    color: white;                /* ✅ Texte blanc */
+    background-color: #2e7d32;
+    color: white;
     font-size: 16px;
     font-weight: bold;
 }
 
-/* Alternance des lignes */
 tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
 tr:hover {
     background-color: #f1f1f1;
-}
-
-/* Titre secondaire */
-h2 {
-    text-align: center;
-    color: #333;
-    font-size: 22px;
-    margin-bottom: 20px;
 }
 
 /* Feedback messages */
@@ -136,40 +169,38 @@ h2 {
     margin-right: auto;
 }
 
-.feedback.success {
+/* ✅ Harmonisation en vert clair pour succès ET erreur */
+.feedback.success,
+.feedback.error {
     background-color: #d4edda;   /* vert clair */
     color: #155724;              /* vert foncé */
     border: 1px solid #c3e6cb;
 }
 
-.feedback.error {
-    background-color: #f8d7da;   /* rouge clair */
-    color: #721c24;              /* rouge foncé */
-    border: 1px solid #f5c6cb;
-}
-
 /* Sélecteur de statut */
-.status-select {
+.action-select {
     padding: 8px;
     border-radius: 6px;
     border: 1px solid #bbb;
     font-size: 14px;
     background-color: white;
     cursor: pointer;
+    min-width: 140px;   /* ✅ assez large pour afficher "En attente" en entier */
 }
 
-.status-en_attente {
-    color: #d97706;
+/* Statuts colorés */
+.statut-attente {
+    color: orange;
     font-weight: bold;
 }
 
-.status-en_cours {
-    color: #2563eb;
+.statut-encours {
+    color: blue;
     font-weight: bold;
 }
 
-.status-traite {
-    color: #15803d;
+.statut-traite {
+    color: green;
     font-weight: bold;
 }
 
@@ -178,8 +209,35 @@ h2 {
     margin-top: 20px;
     padding: 15px;
     border-radius: 10px;
-    background-color: #e8f5e9;
+    background-color: #f9f9f9;
     border-left: 5px solid #2e7d32;
-    color: #1b5e20;
+    color: #333;
     font-weight: bold;
 }
+
+/* ✅ Colonne Description élargie */
+.description-cell {
+  max-width: 300px;
+  text-align: left;
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+/* ✅ Colonne Date élargie et sur une seule ligne */
+.date-cell {
+  min-width: 200px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ✅ Colonne Lieu sur une seule ligne */
+.lieu-cell {
+  min-width: 150px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+
+
+

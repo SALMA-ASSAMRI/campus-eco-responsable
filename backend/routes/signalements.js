@@ -6,9 +6,7 @@ const pool = require('../config/database'); // mysql2/promise
 router.get('/signalements', async (req, res) => {
     try {
         const [results] = await pool.query(`
-            SELECT id, type, lieu, description, 
-                   IF(anonyme = 1, 'Anonyme', nom) AS nom, 
-                   anonyme, statut, date_creation, date_modification
+            SELECT id, type, lieu, nom, description, anonyme, statut, date_creation, date_modification
             FROM signalements
             ORDER BY date_creation DESC
         `);
@@ -22,28 +20,28 @@ router.get('/signalements', async (req, res) => {
 // ================== POST nouveau signalement ==================
 router.post('/signalement', async (req, res) => {
     try {
-        let { type, lieu, description, nom, anonyme } = req.body;
+        const { type, lieu, description, nom, anonyme } = req.body;
 
         // ✅ Forcer anonymisation si case cochée
-        if (anonyme === "1" || anonyme === 1 || anonyme === true) {
-            nom = null;
-            anonyme = 1;
-        } else {
-            anonyme = 0;
-        }
+        const nomFinal = (anonyme === "1" || anonyme === 1 || anonyme === true)
+            ? "Anonyme"
+            : nom;
 
-        // ✅ statut = 'nouveau'
-        const sql = `
-            INSERT INTO signalements (type, lieu, description, nom, anonyme, statut, date_creation)
-            VALUES (?, ?, ?, ?, ?, 'nouveau', NOW())
-        `;
-        const [result] = await pool.query(sql, [type, lieu, description, nom, anonyme]);
+        const anonymeFlag = (anonyme === "1" || anonyme === 1 || anonyme === true) ? 1 : 0;
 
-        // 👉 Réponse simplifiée pour le frontend
-        res.json({ success: true, id: result.insertId });
+        // ✅ statut = 'en_attente' par défaut
+        await pool.query(
+            "INSERT INTO signalements (type, lieu, nom, description, anonyme, statut, date_creation) VALUES (?, ?, ?, ?, ?, 'en_attente', NOW())",
+            [type, lieu, nomFinal, description, anonymeFlag]
+        );
+
+        res.json({ 
+            success: true, 
+            message: "✔️ Signalement enregistré avec succès !" 
+        });
     } catch (error) {
         console.error("❌ Erreur ajout signalement:", error.message);
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: "❌ Erreur lors de l’ajout du signalement." });
     }
 });
 
@@ -53,9 +51,10 @@ router.put('/signalement/:id', async (req, res) => {
         const { id } = req.params;
         const { statut } = req.body;
 
-        const statutsValides = ['nouveau', 'en_cours', 'traite'];
+        // ✅ Liste des statuts valides
+        const statutsValides = ['en_attente', 'en_cours', 'traite'];
         if (!statutsValides.includes(statut)) {
-            return res.status(400).json({ success: false });
+            return res.status(400).json({ success: false, message: "❌ Statut invalide." });
         }
 
         const sql = `
@@ -66,13 +65,13 @@ router.put('/signalement/:id', async (req, res) => {
         const [result] = await pool.query(sql, [statut, id]);
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ success: false });
+            return res.status(404).json({ success: false, message: "❌ Signalement introuvable." });
         }
 
-        res.json({ success: true });
+        res.json({ success: true, message: "✅ Statut mis à jour avec succès." });
     } catch (error) {
         console.error("❌ Erreur mise à jour statut:", error.message);
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: "❌ Erreur serveur lors de la mise à jour du statut." });
     }
 });
 
@@ -85,7 +84,8 @@ router.get('/statistiques', async (req, res) => {
             GROUP BY statut
         `);
 
-        const stats = { nouveau: 0, en_cours: 0, traite: 0 };
+        // ✅ Initialiser avec les bons statuts
+        const stats = { en_attente: 0, en_cours: 0, traite: 0 };
         rows.forEach(row => {
             stats[row.statut] = row.total;
         });
@@ -93,8 +93,11 @@ router.get('/statistiques', async (req, res) => {
         res.json({ success: true, data: stats });
     } catch (error) {
         console.error("❌ Erreur statistiques:", error.message);
-        res.status(500).json({ success: false });
+        res.status(500).json({ success: false, message: "❌ Erreur lors du calcul des statistiques." });
     }
 });
 
 module.exports = router;
+
+
+
