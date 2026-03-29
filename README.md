@@ -60,17 +60,8 @@ npm install
 
 👩‍💻 Auteur
 
-Projet développé par Salma Assamri  
+Projet développé par Salma Assamri & Nabila abouilaaz
 Rôle : Product Owner et Développeuse Full-Stack.
 Remplir le formulaire et tester
-📜 Licence
 
-Projet académique – utilisation libre pour l’apprentissage et la sensibilisation écologique.
-Code
 
-### 🎯 Résultat attendu
-- Tu colles ce texte dans ton fichier **README.md** (à la racine du projet).  
-- Sur GitHub, il sera affiché automatiquement en page d’accueil de ton dépôt.  
-- Les gens comprendront immédiatement ton projet, comment l’installer et l’utiliser.  
-
-👉 Veux-tu que je t’ajoute aussi un **exemple de script SQL `CREATE TABLE signalements`** dans
